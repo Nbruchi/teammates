@@ -1,10 +1,4 @@
-import {
-  ClerkProvider,
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs"
 import { shadcn } from "@clerk/ui/themes"
 import { Geist, Geist_Mono } from "next/font/google"
 
@@ -41,15 +35,6 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: shadcn }}>
           <ThemeProvider>
             <TooltipProvider>
-              <header className="flex h-14 items-center justify-end gap-2 border-b px-6">
-                <Show when="signed-out">
-                  <SignInButton />
-                  <SignUpButton />
-                </Show>
-                <Show when="signed-in">
-                  <UserButton />
-                </Show>
-              </header>
               <Toaster>{children}</Toaster>
             </TooltipProvider>
           </ThemeProvider>
