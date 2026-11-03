@@ -10,6 +10,8 @@
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
+    "guard": "node scripts/check-injected-code.mjs",
+    "prepare": "node scripts/check-injected-code.mjs --install-hooks",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"
   },
