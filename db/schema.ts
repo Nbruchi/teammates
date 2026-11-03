@@ -94,3 +94,7 @@ export const createBotSchema = insertBotSchema.pick({
 })
 
 export type CreateBotInput = z.infer<typeof createBotSchema>
+
+export const insertChatSchema = createInsertSchema(chats)
+
+export const insertChatMemberSchema = createInsertSchema(chatMembers)
