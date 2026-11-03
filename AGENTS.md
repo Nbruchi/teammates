@@ -25,6 +25,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Git
 - Never create branches, worktrees, or commits automatically. Only do so when the user explicitly asks for that specific action in the current request
 - Leave changes uncommitted in the current working tree on the current branch and let the user decide when and how to commit
+- Changes are merged to `main` through pull requests, so every commit message and any pull request you are asked to open must explain what happened: a specific title in the imperative mood (e.g. "Create bot, direct chat, and membership in one transaction", not "Update files"), and a body covering what changed, why, and anything the reviewer should know (schema changes that still need `npm run db:push`, new dependencies, behavior changes, follow-ups). Never use vague messages like "fix" or "updates"
+- Before committing, pull the latest `main` first (the user merges PRs, so the working branch may be behind). Only open a pull request when the user explicitly asks
 
 ## DiceBear
 
