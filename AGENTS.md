@@ -12,6 +12,16 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Only sync schema changes with `npm run db:push` (`drizzle-kit push`). Never generate or run migrations (`drizzle-kit generate` / `drizzle-kit migrate`) and never commit a `drizzle/` migrations folder
 - This is a development project. There's no backwards compatibility and the data is worthless. Prefer data loss: never backfill, migrate, or preserve existing rows, and never spend effort on keeping old data working. Every schema change means a clean slate
 
+## Forms
+- Stack: `react-hook-form` + `zod` via `zodResolver` from `@hookform/resolvers/zod`, rendered with the shadcn `Field` components (`components/ui/field.tsx`) inside `Controller`. Wrap in the shadcn `Dialog` (`components/ui/dialog.tsx`) when the form lives in a modal
+- Derive validation from the database: define `insertXSchema` with `createInsertSchema` (`drizzle-zod`) next to the table in `db/schema.ts`, put field rules (trim, min/max, messages) in its refinements, and derive the form/action schema from it with `.pick()` / `.omit()`. Never hand-write a parallel zod schema for a table. Export the inferred input type with `z.infer`
+- Never let the client supply `userId` or other server-owned columns (`id`, `createdAt`, `sandboxId`). Exclude them from the form schema and add them in the action
+- Mutations are server actions in `actions/<entity>.ts` (`"use server"`, only async function exports, so schemas and types live in `db/schema.ts`). Each action must: get `userId` from `auth()` (`@clerk/nextjs/server`) and reject when signed out, re-validate the input with `safeParse` (the client is untrusted), build the row with the insert schema, insert with `db`, then `revalidatePath`. Accept `input: unknown` and return a result object (`{ ok: true, ... } | { ok: false, error }`) instead of throwing for expected failures
+- Components: form components go in `components/<name>.tsx`; pages stay server components and pass the trigger in as an element prop (e.g. `<BotDialog trigger={<Button />} />`, rendered with `DialogTrigger render={trigger}`). Mount the form inside `DialogContent` so each open starts with fresh state (and random defaults like `nanoid()` avatar seeds are not generated during SSR)
+- Field pattern: `<Field data-invalid>` + `FieldLabel htmlFor` + `Input`/`Textarea` with `aria-invalid` + `FieldError errors={[fieldState.error]}`. Use `useWatch`, not `form.watch()` (React Compiler lint). Optional text columns need `value={field.value ?? ""}`
+- Submit with `useTransition`: disable the submit button and show `Spinner` while pending, report results with `toast.add(...)` from `components/ui/toast.tsx`, and close the dialog on success
+- Use the shadcn, neon, and clerk skills when building forms; if a skill can't load (network), follow existing components and `components.json`
+
 ## Git
 - Never create branches, worktrees, or commits automatically. Only do so when the user explicitly asks for that specific action in the current request
 - Leave changes uncommitted in the current working tree on the current branch and let the user decide when and how to commit
