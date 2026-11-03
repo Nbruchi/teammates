@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server"
 import { PlusIcon } from "lucide-react"
 
+import { BotDialog } from "@/components/bot-dialog"
 import { ChatAvatar } from "@/components/chat-avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -26,10 +27,14 @@ export default async function Page() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button>
-            <PlusIcon data-icon="inline-start" />
-            Create a new bot
-          </Button>
+          <BotDialog
+            trigger={
+              <Button>
+                <PlusIcon data-icon="inline-start" />
+                Create a new bot
+              </Button>
+            }
+          />
         </EmptyContent>
       </Empty>
     </div>
