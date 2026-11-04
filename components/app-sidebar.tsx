@@ -11,6 +11,7 @@ import { BotDialog } from "@/components/bot-dialog"
 import { ChatAvatar } from "@/components/chat-avatar"
 import { Button } from "@/components/ui/button"
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -100,37 +101,39 @@ export function AppSidebar({ chats }: { chats: SidebarChat[] }) {
           title="Search chats"
           description="Search your chats by bot name or message."
         >
-          <CommandInput placeholder="Search chats..." />
-          <CommandList>
-            <CommandEmpty>No chats found.</CommandEmpty>
-            <CommandGroup>
-              {chats.map((chat) => (
-                <CommandItem
-                  key={chat.id}
-                  value={chat.id}
-                  keywords={[
-                    chat.name,
-                    ...(chat.lastMessagePreview
-                      ? [chat.lastMessagePreview]
-                      : []),
-                  ]}
-                  onSelect={() => {
-                    setSearchOpen(false)
-                    router.push(`/chats/${chat.id}`)
-                  }}
-                  className="gap-3"
-                >
-                  <ChatAvatar seed={chat.avatar} className="shrink-0" />
-                  <div className="grid min-w-0 flex-1 gap-0.5 leading-tight">
-                    <span className="truncate text-sm">{chat.name}</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {chat.lastMessagePreview ?? "No messages yet"}
-                    </span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
+          <Command>
+            <CommandInput placeholder="Search chats..." />
+            <CommandList>
+              <CommandEmpty>No chats found.</CommandEmpty>
+              <CommandGroup>
+                {chats.map((chat) => (
+                  <CommandItem
+                    key={chat.id}
+                    value={chat.id}
+                    keywords={[
+                      chat.name,
+                      ...(chat.lastMessagePreview
+                        ? [chat.lastMessagePreview]
+                        : []),
+                    ]}
+                    onSelect={() => {
+                      setSearchOpen(false)
+                      router.push(`/chats/${chat.id}`)
+                    }}
+                    className="gap-3"
+                  >
+                    <ChatAvatar seed={chat.avatar} className="shrink-0" />
+                    <div className="grid min-w-0 flex-1 gap-0.5 leading-tight">
+                      <span className="truncate text-sm">{chat.name}</span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {chat.lastMessagePreview ?? "No messages yet"}
+                      </span>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
         </CommandDialog>
       </SidebarHeader>
       <SidebarContent>
