@@ -95,6 +95,17 @@ export const createBotSchema = insertBotSchema.pick({
 
 export type CreateBotInput = z.infer<typeof createBotSchema>
 
+/** Same fields as creating, plus the id of the bot being edited. */
+export const updateBotSchema = insertBotSchema
+  .pick({ id: true, name: true, job: true, avatar: true, instructions: true })
+  .required({ id: true })
+
+export type UpdateBotInput = z.infer<typeof updateBotSchema>
+
+export const deleteBotSchema = insertBotSchema
+  .pick({ id: true })
+  .required({ id: true })
+
 export const insertChatSchema = createInsertSchema(chats)
 
 export const insertChatMemberSchema = createInsertSchema(chatMembers)
