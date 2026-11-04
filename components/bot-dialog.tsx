@@ -32,10 +32,26 @@ import { toast } from "@/components/ui/toast"
 import { createBotSchema, type CreateBotInput } from "@/db/schema"
 
 const JOB_SUGGESTIONS = [
-  "Research assistant",
-  "Code reviewer",
-  "Writing editor",
-  "Tutor",
+  {
+    job: "Research assistant",
+    instructions:
+      "Answer briefly, cite sources, and ask before running anything destructive.",
+  },
+  {
+    job: "Code reviewer",
+    instructions:
+      "Review changes for correctness, security, and readability. Point to the exact lines, explain why each issue matters, and suggest a fix. Separate blocking problems from nitpicks, and don't rewrite code unless asked.",
+  },
+  {
+    job: "Writing editor",
+    instructions:
+      "Improve clarity, flow, and tone while keeping my voice. Explain the biggest changes, flag anything unclear instead of guessing, and keep edits minimal unless I ask for a rewrite.",
+  },
+  {
+    job: "Tutor",
+    instructions:
+      "Teach step by step at my level. Ask what I already know first, use examples, and check my understanding with short questions. Guide me to the answer instead of just giving it.",
+  },
 ]
 
 type BotDialogProps = {
@@ -100,19 +116,18 @@ function BotForm({ onDone }: { onDone: () => void }) {
       </DialogHeader>
 
       <div className="flex flex-wrap gap-2">
-        {JOB_SUGGESTIONS.map((job) => (
+        {JOB_SUGGESTIONS.map(({ job, instructions }) => (
           <Button
             key={job}
             type="button"
             variant="outline"
             size="sm"
             className="rounded-full"
-            onClick={() =>
-              form.setValue("job", job, {
-                shouldDirty: true,
-                shouldValidate: true,
-              })
-            }
+            onClick={() => {
+              const options = { shouldDirty: true, shouldValidate: true }
+              form.setValue("job", job, options)
+              form.setValue("instructions", instructions, options)
+            }}
           >
             {job}
           </Button>
