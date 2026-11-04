@@ -38,12 +38,29 @@ const JOB_SUGGESTIONS = [
   "Tutor",
 ]
 
-export function BotDialog({ trigger }: { trigger: React.ReactElement }) {
-  const [open, setOpen] = useState(false)
+type BotDialogProps = {
+  /** Element that opens the dialog. Omit it to control the dialog with `open`. */
+  trigger?: React.ReactElement
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}
+
+export function BotDialog({
+  trigger,
+  open: openProp,
+  onOpenChange,
+}: BotDialogProps) {
+  const [openState, setOpenState] = useState(false)
+  const open = openProp ?? openState
+
+  function setOpen(next: boolean) {
+    setOpenState(next)
+    onOpenChange?.(next)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={trigger} />
+      {trigger && <DialogTrigger render={trigger} />}
       <DialogContent className="sm:max-w-lg">
         <BotForm onDone={() => setOpen(false)} />
       </DialogContent>
