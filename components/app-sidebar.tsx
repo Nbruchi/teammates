@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
 import { formatDistanceToNowStrict } from "date-fns"
 import { PlusIcon, SearchIcon, UsersIcon } from "lucide-react"
@@ -42,6 +42,7 @@ import type { SidebarChat } from "@/queries/bots"
 
 export function AppSidebar({ chats }: { chats: SidebarChat[] }) {
   const router = useRouter()
+  const pathname = usePathname()
   const [botDialogOpen, setBotDialogOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
 
@@ -144,6 +145,7 @@ export function AppSidebar({ chats }: { chats: SidebarChat[] }) {
                 <SidebarMenuItem key={chat.id}>
                   <SidebarMenuButton
                     size="lg"
+                    isActive={pathname === `/chats/${chat.id}`}
                     className="gap-3 group-data-[collapsible=icon]:justify-center"
                     tooltip={chat.name}
                     render={<Link href={`/chats/${chat.id}`} />}
